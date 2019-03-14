@@ -27,6 +27,7 @@ Thumbs.db
 /engine/Shopware/Plugins/Local/Frontend/*
 
 /custom/plugins/*
+!/custom/plugins/KubaStartup
 
 # User installed themes
 /themes/Frontend/*
