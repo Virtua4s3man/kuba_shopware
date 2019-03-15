@@ -2,9 +2,9 @@
 
 namespace KubaStartup\Subscribers;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Enlight\Event\SubscriberInterface;
 
-class FrontendRoutingSubscribers implements EventSubscriberInterface
+class FrontendRoutingSubscribers implements SubscriberInterface
 {
     public static function getSubscribedEvents()
     {
