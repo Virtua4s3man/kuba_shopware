@@ -49,7 +49,6 @@
         {block name="frontend_detail_index_bundle"}{/block}
 
         {block name="frontend_detail_index_detail"}
-
             {* Tab navigation *}
             {block name="frontend_detail_index_tabs"}
                 {include file="frontend/detail/tabs.tpl"}

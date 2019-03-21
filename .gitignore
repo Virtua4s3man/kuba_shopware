@@ -28,6 +28,9 @@ Thumbs.db
 
 /custom/plugins/*
 !/custom/plugins/KubaStartup
+!/custom/plugins/FroshProfiler
+!/custom/plugins/SwagAdvDevBundle7
+!/custom/plugins/SwagExtendBackend
 
 # User installed themes
 /themes/Frontend/*
