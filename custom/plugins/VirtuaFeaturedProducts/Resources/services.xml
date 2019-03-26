@@ -5,12 +5,9 @@
 
     <services>
 
-
-
-
-
-
-
+        <service class="VirtuaFeaturedProducts\Subscribers\FrontendRoutingSubscriber" id="virtua_featured_products.subscribers.frontend_routing_subscriber">
+            <tag name="shopware.event_subscriber"/>
+        </service>
 
     </services>
 </container>

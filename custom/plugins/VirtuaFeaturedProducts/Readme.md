@@ -1,7 +1,7 @@
 # VirtuaFeaturedProducts
-## About VirtuaFeaturedProducts
-This skeleton contains a License file, fileheader and a basic README.
+## Virtua Internship Plugin
+
 
 ## License
 
-Please see [License File](LICENSE) for more information.
+GNU GPLv3 

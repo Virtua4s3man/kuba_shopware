@@ -1,42 +1,36 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-03-26
+ * Time: 14:38
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @license GNU GPLv3
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
 namespace VirtuaFeaturedProducts;
 
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Shopware-Plugin VirtuaFeaturedProducts.
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @license GNU GPLv3
+ * @link    https://github.com/virtIntern4a/kuba_shopware
  */
 class VirtuaFeaturedProducts extends Plugin
 {
-    public static function getSubscribedEvents()
-    {
-        return [
-          'Enlight_Controller_Action_PostDispatch_Backend_Base' => 'addBackendTemplate',
-        ];
-    }
-
-    public function addBackendTemplate(\Enlight_Controller_ActionEventArgs $args)
-    {
-        /** @var \Enlight_View_Default $view */
-        $view = $args->getSubject()->View();
-        $view->addTemplateDir($this->getPath() . 'Resources/views/');
-//todo zrobić rzeby działało z tłumaczeniami
-//        $view->extendsTemplate('backend/base/attribute/form/featured.js');
-    }
-
     /**
-    * @param ContainerBuilder $container
-    */
-    public function build(ContainerBuilder $container)
-    {
-        $container->setParameter('virtua_featured_products.plugin_dir', $this->getPath());
-        parent::build($container);
-    }
-
+     * Runs on plugin installation
+     *
+     * @param InstallContext $context install context
+     *
+     * @throws \Exception
+     */
     public function install(InstallContext $context)
     {
         $crudService = $this->container->get('shopware_attribute.crud_service');
@@ -54,6 +48,13 @@ class VirtuaFeaturedProducts extends Plugin
         );
     }
 
+    /**
+     * Runs on plugin deinstallation
+     *
+     * @param UninstallContext $context uninstall context
+     *
+     * @throws \Exception
+     */
     public function uninstall(UninstallContext $context)
     {
         if ($context->keepUserData()) {
@@ -66,5 +67,4 @@ class VirtuaFeaturedProducts extends Plugin
             'is_featured'
         );
     }
-
 }
