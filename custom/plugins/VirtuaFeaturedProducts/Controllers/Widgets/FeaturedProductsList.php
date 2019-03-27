@@ -22,15 +22,25 @@ class Shopware_Controllers_Widgets_FeaturedProductsList extends \Enlight_Control
     {
         $config = $this->container->get('virtua_featured_products.config');
 
-        $numbers = $this->getFeaturedProductNumbers();
+        $this->View()->assign('display', $config['display']);
+
+//        if ($config['display'] === false) {
+//            return;
+//        }
+
+
+        $maxResultss = $this->getFeaturedProductNumbers($config['product_count']);
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
+        //10164
+        //10176
+        //TS
+        // produkty o tych ordernumber nie są pobierane przez getList dlaczego?
         $featuredProducts = $this->container->get('shopware_storefront.list_product_service')
-            ->getList($numbers, $context);
+            ->getList($maxResultss, $context);
 
-
-
-        dump($config);
+        dump($maxResultss);
+        dump($featuredProducts);
     }
 
     /**
@@ -38,7 +48,7 @@ class Shopware_Controllers_Widgets_FeaturedProductsList extends \Enlight_Control
      *
      * @return array
      */
-    private function getFeaturedProductNumbers($number = 3)
+    private function getFeaturedProductNumbers($maxResults)
     {
         /** @var \Doctrine\DBAL\Connection $connection */
         $builder = $this->container->get('dbal_connection')->createQueryBuilder();
@@ -50,7 +60,7 @@ class Shopware_Controllers_Widgets_FeaturedProductsList extends \Enlight_Control
                 'attributes',
                 'details.articleID = attributes.articleID'
             )->where('attributes.is_featured = 1')
-            ->setMaxResults($number);
+            ->andWhere('details.kind = 1');
 
         return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
