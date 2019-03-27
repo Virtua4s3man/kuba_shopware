@@ -5,8 +5,15 @@
 
     <services>
 
-        <service class="VirtuaFeaturedProducts\Subscribers\FrontendRoutingSubscriber" id="virtua_featured_products.subscribers.frontend_routing_subscriber">
+        <service class="VirtuaFeaturedProducts\Subscribers\FrontendRoutingSubscriber"
+                 id="virtua_featured_products.subscribers.frontend_routing_subscriber">
             <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Components\Plugin\CachedConfigReader"
+                 id="virtua_featured_products.config">
+            <factory service="shopware.plugin.config_reader" method="getByPluginName" />
+            <argument type="string">VirtuaFeaturedProducts</argument>
         </service>
 
     </services>
