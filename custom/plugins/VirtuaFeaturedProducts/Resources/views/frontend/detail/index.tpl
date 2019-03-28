@@ -5,5 +5,5 @@
     {if $sArticle.is_featured == 1}
         <div class="content--title">{s name="is_featured" }{/s}</div>
     {/if}
-    {action module=widgets controller=featured_products_list action=custom}
+    {action module=widgets controller=featured_products_list action=show_list}
 {/block}

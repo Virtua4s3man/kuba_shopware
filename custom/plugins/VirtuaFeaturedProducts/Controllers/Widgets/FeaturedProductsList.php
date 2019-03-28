@@ -21,7 +21,7 @@ class Shopware_Controllers_Widgets_FeaturedProductsList extends \Enlight_Control
     /**
      * Provide data to featured products slider widget
      */
-    public function customAction()
+    public function showListAction()
     {
         $config = $this->container->get('virtua_featured_products.config');
         $this->View()->assign('display', $config['display']);
