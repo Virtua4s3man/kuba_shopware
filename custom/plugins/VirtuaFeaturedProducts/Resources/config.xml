@@ -8,7 +8,7 @@
             <value>false</value>
         </element>
         <element type="text">
-            <name>products_number</name>
+            <name>product_count</name>
             <label lang="en">Number of products</label>
             <value>3</value>
         </element>
