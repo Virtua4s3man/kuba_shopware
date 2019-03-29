@@ -30,8 +30,8 @@ class Shopware_Controllers_Widgets_FeaturedProductsList extends \Enlight_Control
             return;
         }
 
-        $orderNumbers = $this->getFeaturedProductNumbers($config['product_count']);
-        $productStruct = $this->getFeaturedProductStructList($orderNumbers);
+        $numbers = $this->getFeaturedProductNumbers($config['product_count']);
+        $productStruct = $this->getFeaturedProductStructList($numbers);
 
         $this->View()->assign(
             'featuredProducts',
@@ -67,16 +67,16 @@ class Shopware_Controllers_Widgets_FeaturedProductsList extends \Enlight_Control
     /**
      * Gets array of product arrays
      *
-     * @param array $orderNumbers
+     * @param array $numbers (ordernumber from db)
      * @return array
      */
-    private function getFeaturedProductStructList(array $orderNumbers)
+    private function getFeaturedProductStructList(array $numbers)
     {
         $context = $this->container->get('shopware_storefront.context_service')
             ->getShopContext();
 
         $productList = $this->container->get('shopware_storefront.list_product_service')
-            ->getList($orderNumbers, $context);
+            ->getList($numbers, $context);
 
         return $this->container->get('legacy_struct_converter')
             ->convertListProductStructList($productList);
