@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service class="VirtuaHidePrices\Subscribers\FrontendGlobalsSubscriber"
+                 id="virtua_hide_prices.subscribers.frontend_globals_subscriber">
+            <argument type="service" id="virtua_hide_prices.config" />
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Components\Plugin\CachedConfigReader"
+                  id="virtua_hide_prices.config">
+            <factory service="shopware.plugin.config_reader" method="getByPluginName"/>
+            <argument type="string">VirtuaHidePrices</argument>
+        </service>
+
+    </services>
+</container>
