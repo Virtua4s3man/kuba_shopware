@@ -73,5 +73,3 @@ class VirtuaTechnology extends Plugin
         return [$this->container->get('models')->getClassMetadata(Models\VirtuaTechnology::class)];
     }
 }
-
-
