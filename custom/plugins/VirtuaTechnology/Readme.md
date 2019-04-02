@@ -1,5 +1,2 @@
 # VirtuaTechnology
-## About VirtuaTechnology
-Backend technology feature
-
-## License
+##Internship Virtua backend technology feature

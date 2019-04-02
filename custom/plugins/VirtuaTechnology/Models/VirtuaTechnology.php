@@ -53,7 +53,7 @@ class VirtuaTechnology extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
      */
     private $url;
 
@@ -87,6 +87,9 @@ class VirtuaTechnology extends ModelEntity
     public function setName($name)
     {
         $this->name = $name;
+        $this->setUrl(
+            strtolower(Shopware()->Container()->get('shopware.slug')->slugify($name))
+        );
     }
 
     /**
@@ -130,7 +133,7 @@ class VirtuaTechnology extends ModelEntity
     }
 
     /**
-     * @param string $url
+     * @param $url
      */
     public function setUrl($url)
     {

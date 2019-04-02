@@ -15,7 +15,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Shopware-Plugin VirtuaTechnology.
@@ -74,4 +73,5 @@ class VirtuaTechnology extends Plugin
         return [$this->container->get('models')->getClassMetadata(Models\VirtuaTechnology::class)];
     }
 }
+
 
