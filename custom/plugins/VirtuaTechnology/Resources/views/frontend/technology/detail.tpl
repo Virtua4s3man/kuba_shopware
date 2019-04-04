@@ -3,8 +3,8 @@
 {block name="frontend_index_header"}
     {$smarty.block.parent}
     <style>
-        .js--img-zoom--flyout{
-            opacity: 100%;
+        .js--img-zoom--flyout, js--img-zoom--lens{
+            opacity: 0;
         }
     </style>
 {/block}
