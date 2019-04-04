@@ -1,41 +1,82 @@
-{extends file="parent:frontend/index/index.tpl" }
+{extends file="parent:frontend/listing/index.tpl" }
 
-{block name="frontend_index_left_categories_inner"}
+{block name="frontend_listing_index_topseller"}{/block}
 
-{/block}
+{block name="frontend_index_left_categories_inner"}{/block}
 
-{block name="frontend_listing_listing_container"}
-    <div class="listing--container">
+{block name='frontend_listing_box_article_price_info'}{/block}
 
-        {block name="frontend_listing_no_filter_result"}
-            <div class="listing-no-filter-result">
-                {s name="noFilterResult" assign="snippetNoFilterResult"}Für die Filterung wurden keine Ergebnisse gefunden!{/s}
-                {include file="frontend/_includes/messages.tpl" type="info" content=$snippetNoFilterResult visible=false}
-            </div>
+{block name='frontend_listing_box_article_actions'}{/block}
+
+{block name='frontend_listing_actions_paging_inner'}
+    <div class="listing--paging panel--paging">
+
+        {* Pagination label *}
+        {block name='frontend_listing_actions_paging_label'}{/block}
+
+        {* Pagination - Frist page *}
+        {block name="frontend_listing_actions_paging_first"}
+            {if $sPage > 1}
+                {s name="ListingLinkFirst" assign="snippetListingLinkFirst"}{/s}
+                <a href="{$baseUrl}?{$shortParameters.sPage}=1" title="{$snippetListingLinkFirst|escape}" class="paging--link paging--prev" data-action-link="true">
+                    <i class="icon--arrow-left"></i>
+                    <i class="icon--arrow-left"></i>
+                </a>
+            {/if}
         {/block}
 
-        {block name="frontend_listing_listing_content"}
-            <div class="listing"
-                 data-ajax-wishlist="true"
-                 data-compare-ajax="true"
-                    {if $theme.infiniteScrolling}
-                data-infinite-scrolling="true"
-                data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
-                data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
-                data-categoryId="{$sCategoryContent.id}"
-                data-pages="{$pages}"
-                data-threshold="{$theme.infiniteThreshold}"
-                data-pageShortParameter="{$shortParameters.sPage}"
-                    {/if}>
+        {* Pagination - Previous page *}
+        {block name='frontend_listing_actions_paging_previous'}
+            {if $sPage > 1}
+                {s name="ListingLinkPrevious" assign="snippetListingLinkPrevious"}{/s}
+                <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage-1}" title="{$snippetListingLinkPrevious|escape}" class="paging--link paging--prev" data-action-link="true">
+                    <i class="icon--arrow-left"></i>
+                </a>
+            {/if}
+        {/block}
 
-                {* Actual listing *}
-                {block name="frontend_listing_list_inline"}
-                    {foreach $technologies as $sArticle}
-                        {include file="frontend/listing/box_article.tpl"}
-                    {/foreach}
-                {/block}
-            </div>
+        {* Pagination - current page *}
+        {block name='frontend_listing_actions_paging_numbers'}
+            {if $t_pages > 1}
+                <a title="{$sCategoryContent.name|escape}" class="paging--link is--active">{$sPage}</a>
+            {/if}
+        {/block}
+
+        {* Pagination - Next page *}
+        {block name='frontend_listing_actions_paging_next'}
+            {if $sPage < $t_pages}
+                {s name="ListingLinkNext" assign="snippetListingLinkNext"}{/s}
+                <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage+1}" title="{$snippetListingLinkNext|escape}" class="paging--link paging--next" data-action-link="true">
+                    <i class="icon--arrow-right"></i>
+                </a>
+            {/if}
+        {/block}
+
+        {* Pagination - Last page *}
+        {block name="frontend_listing_actions_paging_last"}
+            {if $sPage < $t_pages}
+                {s name="ListingLinkLast" assign="snippetListingLinkLast"}{/s}
+                <a href="{$baseUrl}?{$shortParameters.sPage}={$t_pages}" title="{$snippetListingLinkLast|escape}" class="paging--link paging--next" data-action-link="true">
+                    <i class="icon--arrow-right"></i>
+                    <i class="icon--arrow-right"></i>
+                </a>
+            {/if}
+        {/block}
+
+        {* Pagination - Number of $t_pages *}
+        {block name='frontend_listing_actions_count'}
+            {if $t_pages > 1}
+                <span class="paging--display">
+                    {s name="ListingTextFrom"}{/s} <strong>{$t_pages}</strong>
+                </span>
+            {/if}
+        {/block}
+
+        {* Products per page selection *}
+        {block name='frontend_listing_actions_items_per_page'}
+            {include file="frontend/listing/actions/action-per-page.tpl"}
         {/block}
     </div>
 {/block}
+
 
