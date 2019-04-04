@@ -1,15 +1,31 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-04-04
+ * Time: 15:55
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
-class Shopware_Controllers_Frontend_Technology extends Enlight_Controller_Action
+/**
+ * Class Technologies controller
+ */
+class Shopware_Controllers_Frontend_Technologies extends Enlight_Controller_Action
 {
+    /**
+     * Display paginated technologies with images
+     *
+     * @throws Exception
+     */
     public function indexAction()
     {
         $sPage = (int) $this->Request()->getParam('p', 1);
         $perSite = 2;
 
-        $technologiesPaginator = $this->getTechnologiesPaginator($sPage, $perSite);
-        $techonologiesArticleStruct = $this->convertTechnologiesToArticleStruct(
-            $technologiesPaginator->getIterator()->getArrayCopy()
+        $paginator = $this->getTechnologiesPaginator($sPage, $perSite);
+        $technologies = $this->convertTechnologiesToArticleStruct(
+            $paginator->getIterator()->getArrayCopy()
         );
 
         /** @var \Shopware\Components\QueryAliasMapper $mapper */
@@ -18,14 +34,14 @@ class Shopware_Controllers_Frontend_Technology extends Enlight_Controller_Action
             'shortParameters' => $mapper->getQueryAliases(),
             'showListing' => true,
             'sPage' => $sPage,
-            'sArticles' => $techonologiesArticleStruct,
+            'sArticles' => $technologies,
             'theme' => ['infiniteScrolling' => false],
         ]);
 
         //todo pytanie: nie moglem przekaza zmiennej pages do widoku bo byla nadpisywana przez nie wiem co
         //w koncu przekleilem kawalek action-pagination do technology/index.tpl i zmienilem nazwe zmiennej
         //jak to zrobic lepiej?
-        $this->View()->assign('t_pages', (int) round($technologiesPaginator->count() / $perSite));
+        $this->View()->assign('t_pages', (int) round($paginator->count() / $perSite));
     }
 
     /**
@@ -55,13 +71,15 @@ class Shopware_Controllers_Frontend_Technology extends Enlight_Controller_Action
     /**
      * Create paginator for fetched technologies
      *
+     * @param $sPage int current page
+     * @param $perSite int amount of pages per site
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      * @throws Exception
      */
     private function getTechnologiesPaginator($sPage, $perSite)
     {
-        $firstResult = ($sPage-1) * $perSite;
-        $query = $this->getBaseTechnologyQueryBuilder($perSite, $firstResult)
+        $firstResult = ($sPage - 1) * $perSite;
+        $query = $this->getBaseTechnologyQueryBuilder()
             ->setFirstResult($firstResult)
             ->setMaxResults($perSite)
             ->getQuery();
@@ -87,7 +105,7 @@ class Shopware_Controllers_Frontend_Technology extends Enlight_Controller_Action
             $technologyStruct = [];
             $technologyStruct['articleName'] = $technology['t_name'];
             $technologyStruct['linkDetails'] =
-                $this->Request()->getPathInfo() . $technology['t_url'];
+                $this->Request()->getControllerName() . '/' . $technology['t_url'];
             $technologyStruct['description_long'] = $technology['t_description'];
 
             if ($mediaService->has($technology['path'])) {
@@ -121,9 +139,6 @@ class Shopware_Controllers_Frontend_Technology extends Enlight_Controller_Action
 
     /**
      * Creates QueryBuilder for querying technologies and their media
-     *
-     * @param $perSite
-     * @param $firstResult
      * @return \Doctrine\ORM\QueryBuilder
      * @throws Exception
      */

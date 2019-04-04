@@ -1,13 +1,12 @@
 <?php
 /**
  * User: virtua
- * Date: 2019-03-26
- * Time: 14:38
+ * Date: 2019-04-04
+ * Time: 15:55
  *
  * @author  Kuba Kułaga <intern4@wearevirtua.com>
- * @license GNU GPLv3
  * @link    https://github.com/virtIntern4a/kuba_shopware
-*/
+ */
 
 namespace VirtuaTechnology\Models;
 

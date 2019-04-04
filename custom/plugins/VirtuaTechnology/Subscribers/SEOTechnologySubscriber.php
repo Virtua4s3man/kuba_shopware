@@ -1,12 +1,26 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-04-04
+ * Time: 15:55
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
 namespace VirtuaTechnology\Subscribers;
 
 use Doctrine\ORM\QueryBuilder;
 use Enlight\Event\SubscriberInterface;
 
+/**
+ * Class SEOTechnologySubscriber
+ */
 class SEOTechnologySubscriber implements SubscriberInterface
 {
+    /**
+     * @inheritdoc
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -17,6 +31,10 @@ class SEOTechnologySubscriber implements SubscriberInterface
         ];
     }
 
+    /**
+     * @param \Enlight_Event_EventArgs $args
+     * @return mixed
+     */
     public function addTechnologyCount(\Enlight_Event_EventArgs $args)
     {
         $counts = $args->getReturn();
@@ -28,23 +46,32 @@ class SEOTechnologySubscriber implements SubscriberInterface
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 
-        $counts['technology'] = $technologyCount;
+        $counts['technologies'] = $technologyCount;
 
         return $counts;
     }
 
+    /**
+     * Rewrite query parameters for seo url-s
+     *
+     * @param \Enlight_Event_EventArgs $args
+     * @return mixed
+     */
     public function filterParameterQuery(\Enlight_Event_EventArgs $args)
     {
         $orgQuery = $args->getReturn();
         $query = $args->getQuery();
 
-        if ($query['controller'] === 'technology' && isset($query['technologyId'])) {
+        if ($query['controller'] === 'technologies' && isset($query['technologyId'])) {
             $orgQuery['technologyId'] = $query['technologyId'];
         }
 
         return $orgQuery;
     }
 
+    /**
+     * Persist seo url-s for technologies
+     */
     public function createTechnologyRewriteTable()
     {
         /** @var \sRewriteTable $rewriteTableModule */
@@ -59,8 +86,8 @@ class SEOTechnologySubscriber implements SubscriberInterface
 
         foreach ($urls as $id => $url) {
             $rewriteTableModule->sInsertUrl(
-                'sViewport=technology&sAction=detail&technologyId=' . $id,
-                'technology/' . $url
+                'sViewport=technologies&sAction=detail&technologyId=' . $id,
+                'technologies/' . $url
             );
         }
     }
