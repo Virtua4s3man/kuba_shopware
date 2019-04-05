@@ -20,8 +20,7 @@ class Shopware_Controllers_Frontend_Technologies extends Enlight_Controller_Acti
      */
     public function indexAction()
     {
-        //todo pytanie czy takie cos jest ok?
-        $sPage = (int) $this->Request()->getParam('p', 1);
+        $sPage = intval($this->Request()->getParam('p', 1));
         if ($sPage < 1) {
             $sPage = 1;
         }
