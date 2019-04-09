@@ -2,6 +2,7 @@
 
 namespace VirtuaTechnology\SearchBundleDBAL\Facet;
 
+use Doctrine\Common\Util\Debug;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
@@ -10,6 +11,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Shop\Shop;
 use VirtuaTechnology\SearchBundle\Facet\TechnologyFacet;
 
 class TechnologyFacetHandler implements PartialFacetHandlerInterface
@@ -32,6 +34,10 @@ class TechnologyFacetHandler implements PartialFacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
+        
+        if (!$this->technologyAttributeFound($reverted, $context)) {
+            return null;
+        }
 
         return new ValueListFacetResult(
             $facet->getName(),
@@ -68,5 +74,21 @@ class TechnologyFacetHandler implements PartialFacetHandlerInterface
         }
 
         return $listItems;
+    }
+
+    /**
+     * Check if there is product with technology attribute
+     * @param Criteria $reverted
+     * @param ShopContextInterface $context
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function technologyAttributeFound(Criteria $reverted, ShopContextInterface $context)
+    {
+        return (bool) $this->queryBuilderFactory->createQuery($reverted, $context)
+            ->select('productAttribute.technology')
+            ->andWhere('productAttribute.technology IS NOT NULL')
+            ->execute()->fetch();
     }
 }
