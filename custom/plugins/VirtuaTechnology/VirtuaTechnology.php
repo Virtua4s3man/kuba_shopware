@@ -12,6 +12,8 @@
 namespace VirtuaTechnology;
 
 use Doctrine\ORM\Tools\SchemaTool;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -41,19 +43,40 @@ class VirtuaTechnology extends Plugin
      */
     public function install(InstallContext $context)
     {
-        $tool = new SchemaTool($this->container->get('models'));
-        $classes = $this->getModelMetaData();
+        /** @var CrudService $attributeCrud */
+        $attributeCrud = $this->container->get('shopware_attribute.crud_service');
 
-        try {
-            $tool->dropSchema($classes);
-        } catch (\Exception $e) {
+        $attributeCrud->update(
+            's_articles_attributes',
+            'technology',
+            'multi_selection',
+            [
+                'label' => 'technology',
+                'supportText' => 'product technology',
+                'displayInBackend' => true,
+                'translatable' => true,
+                'entity' => 'VirtuaTechnology\Models\VirtuaTechnology',
+            ]
+        );
+
+        if ($this->schemaExists('virtua_technology')) {
+            return;
         }
 
+        $tool = new SchemaTool($this->container->get('models'));
+        $classes = $this->getModelMetaData();
         $tool->createSchema($classes);
     }
 
     public function uninstall(UninstallContext $context)
     {
+        /** @var CrudService $crudService */
+        $attributeCrud = $this->container->get('shopware_attribute.crud_service');
+        $attributeCrud->delete(
+            's_articles_attributes',
+            'technology'
+        );
+
         if ($context->keepUserData()) {
             return;
         }
@@ -71,5 +94,17 @@ class VirtuaTechnology extends Plugin
     private function getModelMetaData()
     {
         return [$this->container->get('models')->getClassMetadata(Models\VirtuaTechnology::class)];
+    }
+
+    /**
+     * Checks if schema exists
+     *
+     * @param $name
+     * @return bool
+     */
+    private function schemaExists($name)
+    {
+        return $this->container->get('dbal_connection')->getSchemaManager()
+                ->tablesExist([$name]) === true;
     }
 }
