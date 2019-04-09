@@ -5,10 +5,18 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+
+        <!--Event Subscribers-->
         <service class="VirtuaTechnology\Subscribers\SEOTechnologySubscriber"
                  id="virtua_technology.subscribers.seotechnology_subscriber">
             <tag name="shopware.event_subscriber"/>
         </service>
+
+        <service class="VirtuaTechnology\Subscribers\TechnologyProductDetailSubscriber"
+                 id="virtua_technology.subscribers.technology_product_detail_subscriber">
+            <tag name="shopware.event_subscriber"/>
+        </service>
+        <!--Event Subscribers END-->
 
         <service id="virtua_technology.config" class="Shopware\Components\Plugin\CachedConfigReader">
             <factory service="shopware.plugin.cached_config_reader" method="getByPluginName"/>
@@ -21,8 +29,6 @@
             <argument type="service" id="virtua_technology.config" />
             <argument type="service" id="shopware_media.media_service" />
         </service>
-
-
 
         <!--Search Services-->
         <service class="VirtuaTechnology\SearchBundle\TechnologyCriteriaRequestHandler"

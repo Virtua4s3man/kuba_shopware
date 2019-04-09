@@ -47,8 +47,7 @@ class TechnologyConditionHandler implements ConditionHandlerInterface
      * @example '1|2|3'
      *
      * @return string
-     * @example '|1|2|3|'
-     * @example ''
+     * @example '|1|2|3|' or ''
      */
     private function makeIdStringRegex($string)
     {
@@ -61,6 +60,7 @@ class TechnologyConditionHandler implements ConditionHandlerInterface
      * Checks if all id's in string are integers
      *
      * @param $string
+     * @example 1|2|3
      *
      * @return bool
      */

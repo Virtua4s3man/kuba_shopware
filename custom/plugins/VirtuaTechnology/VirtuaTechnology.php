@@ -43,6 +43,10 @@ class VirtuaTechnology extends Plugin
      */
     public function install(InstallContext $context)
     {
+        if ($this->schemaExists('virtua_technology')) {
+            return;
+        }
+
         /** @var CrudService $attributeCrud */
         $attributeCrud = $this->container->get('shopware_attribute.crud_service');
 
@@ -59,10 +63,6 @@ class VirtuaTechnology extends Plugin
             ]
         );
 
-        if ($this->schemaExists('virtua_technology')) {
-            return;
-        }
-
         $tool = new SchemaTool($this->container->get('models'));
         $classes = $this->getModelMetaData();
         $tool->createSchema($classes);
@@ -70,16 +70,16 @@ class VirtuaTechnology extends Plugin
 
     public function uninstall(UninstallContext $context)
     {
+        if ($context->keepUserData()) {
+            return;
+        }
+
         /** @var CrudService $crudService */
         $attributeCrud = $this->container->get('shopware_attribute.crud_service');
         $attributeCrud->delete(
             's_articles_attributes',
             'technology'
         );
-
-        if ($context->keepUserData()) {
-            return;
-        }
 
         $tool = new SchemaTool($this->container->get('models'));
         $classes = $this->getModelMetaData();

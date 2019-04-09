@@ -34,7 +34,7 @@ class TechnologyFacetHandler implements PartialFacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        
+
         if (!$this->technologyAttributeFound($reverted, $context)) {
             return null;
         }

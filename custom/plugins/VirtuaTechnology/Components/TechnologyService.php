@@ -38,14 +38,18 @@ class TechnologyService
     }
 
     /**
-     * @param $id int
+     * Find one or many technology by id
+     * @param $ids array
+     *
      * @return array
      */
-    public function findTechnologyById($id)
+    public function findTechnologiesByIds($ids)
     {
+        $stringIds = implode(',', array_map('intval', $ids));
+
         return $this->getBaseTechnologyQueryBuilder()
-            ->where('t.id = :id')
-            ->setParameter('id', $id, \PDO::PARAM_INT)
+            ->where('t.id IN (:id)')
+            ->setParameter('id', $stringIds, \PDO::PARAM_STR)
             ->getQuery()
             ->setHydrationMode(\Doctrine\ORM\Query::HYDRATE_SCALAR)
             ->execute();

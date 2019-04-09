@@ -2,11 +2,12 @@
 
 namespace VirtuaTechnology\Components;
 
+use Doctrine\Common\Util\Debug;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
-//todo tu skonczylem
+//todo usunąć prawdopodobnie
 class ListProductServiceDecorator implements ListProductServiceInterface
 {
     private $coreService;
@@ -21,11 +22,21 @@ class ListProductServiceDecorator implements ListProductServiceInterface
 
     public function getList(array $numbers, ProductContextInterface $context)
     {
-        // TODO: Implement getList() method.
+        $products = $this->coreService->getList($numbers, $context);
+
+        foreach ($products as $product) {
+            $this->technologyService->findTechnologiesByIds('');
+        }
+//        todo usunac
+//        error_log(Debug::dump('wyk1\n'), 3, Shopware()->DocPath() . '/debug.log' );
+
+        return $products;
     }
 
     public function get($number, ProductContextInterface $context)
     {
-        // TODO: Implement get() method.
+        return array_shift(
+            $this->getList([$number], $context)
+        );
     }
 }
