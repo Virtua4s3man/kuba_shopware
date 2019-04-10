@@ -10,7 +10,6 @@
 
 namespace VirtuaTechnology\Subscribers;
 
-use Doctrine\ORM\QueryBuilder;
 use Enlight\Event\SubscriberInterface;
 
 /**
@@ -29,6 +28,9 @@ class TechnologyProductDetailSubscriber implements SubscriberInterface
         ];
     }
 
+    /**
+     * @param \Enlight_Controller_ActionEventArgs $args
+     */
     public function assignTechnologiesToView(\Enlight_Controller_ActionEventArgs $args)
     {
         $view = $args->getSubject()->View();
@@ -38,9 +40,12 @@ class TechnologyProductDetailSubscriber implements SubscriberInterface
             $technologyService = Shopware()->Container()->get('virtua_technology.components.technology_service');
             $view->assign('technologies', $technologyService->findTechnologiesByIds($ids));
         }
-        dump($technologyService->findTechnologiesByIds($ids));
     }
 
+    /**
+     * @param \Enlight_View_Default $view
+     * @return array|null
+     */
     private function getTechnologyIds(\Enlight_View_Default $view)
     {
         $article = $view->getAssign('sArticle');

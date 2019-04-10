@@ -33,6 +33,13 @@ class TechnologyConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+//        todo problem, domyślnie podczas dopisywania atrybutow w multiselect produktu
+//        id sa stawiane po kolei, ale mozna zmienic ich kolejnosc
+//        w przypadku zmiany ich kolejnosci kod nie bedzie dzialal poprawnie
+//        ale probowałem masy rzeczy np. andWhere LIKE '%\|3\|%' takie query
+//        napisane w sequelpro dziala spodziewanie, a przez $quey wyszukuje nic
+//        todo jak to zrobić lepiej?
+
         $query->andWhere('productAttribute.technology REGEXP :id')
             ->setParameter(
                 'id',

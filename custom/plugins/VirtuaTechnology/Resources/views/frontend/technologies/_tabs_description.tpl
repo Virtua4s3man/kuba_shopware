@@ -7,14 +7,12 @@
 
 {* Technology image*}
 {block name='virtua_technology_description_text'}
-    <div class="product--info">
-        <a href="" class="product--image">
-            <span class="image--element">
-                <span class="image--media">
-                    <img src="{link file=$technology.path}" alt="{$technology.name}" itemprop="image" />
-                </span>
-            </span>
-        </a>
+    <div style="max-height: 10rem;max-width: 10rem;">
+        {if $technology.path != null}
+            <img src="{link file=$technology.path}" alt="{$technology.name}" itemprop="image" />
+        {else}
+            <img style="position:relative;" src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}" itemprop="image" />
+        {/if}
     </div>
 {/block}
 

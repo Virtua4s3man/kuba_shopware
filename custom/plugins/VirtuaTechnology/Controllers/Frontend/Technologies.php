@@ -52,7 +52,10 @@ class Shopware_Controllers_Frontend_Technologies extends Enlight_Controller_Acti
         $id = intval($this->Request()->getParam('technologyId'));
         $service = $this->container->get('virtua_technology.components.technology_service');
         $technology = $service->findTechnologiesByIds([$id]);
-        dump($technology);
+
+        if (!$technology) {
+            return $this->forward('pageNotFoundError');
+        }
 
         $this->View()->assign(
             'sArticle',

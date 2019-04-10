@@ -10,10 +10,13 @@ use VirtuaTechnology\VirtuaTechnology;
 
 class TechnologyService
 {
+    /** @var ModelManager  */
     private $modelManager;
 
+    /** @var array $configuration */
     private $configuration;
 
+    /** @var MediaService $mediaService*/
     private $mediaService;
 
     public function __construct(ModelManager $modelManager, array $configuration, MediaService $mediaService)
@@ -45,11 +48,9 @@ class TechnologyService
      */
     public function findTechnologiesByIds($ids)
     {
-        $stringIds = implode(',', array_map('intval', $ids));
-
         return $this->getBaseTechnologyQueryBuilder()
-            ->where('t.id IN (:id)')
-            ->setParameter('id', $stringIds, \PDO::PARAM_STR)
+            ->where("t.id IN(:id)")
+            ->setParameter('id', $ids)
             ->getQuery()
             ->setHydrationMode(\Doctrine\ORM\Query::HYDRATE_SCALAR)
             ->execute();
