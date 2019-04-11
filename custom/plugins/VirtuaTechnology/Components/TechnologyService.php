@@ -1,13 +1,21 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-04-04
+ * Time: 15:55
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
 namespace VirtuaTechnology\Components;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
-use VirtuaTechnology\VirtuaTechnology;
 
+/**
+ * Class TechnologyService
+ */
 class TechnologyService
 {
     /** @var ModelManager  */
@@ -19,6 +27,12 @@ class TechnologyService
     /** @var MediaService $mediaService*/
     private $mediaService;
 
+    /**
+     * TechnologyService constructor.
+     * @param ModelManager $modelManager
+     * @param array $configuration
+     * @param MediaService $mediaService
+     */
     public function __construct(ModelManager $modelManager, array $configuration, MediaService $mediaService)
     {
         $this->modelManager = $modelManager;

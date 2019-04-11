@@ -1,8 +1,15 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-04-04
+ * Time: 15:55
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
 namespace VirtuaTechnology\SearchBundleDBAL\Facet;
 
-use Doctrine\Common\Util\Debug;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
@@ -11,23 +18,36 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Models\Shop\Shop;
 use VirtuaTechnology\SearchBundle\Facet\TechnologyFacet;
 
+/**
+ * Class TechnologyFacetHandler
+ */
 class TechnologyFacetHandler implements PartialFacetHandlerInterface
 {
+    /** @var QueryBuilderFactory  */
     private $queryBuilderFactory;
 
+    /**
+     * TechnologyFacetHandler constructor.
+     * @param QueryBuilderFactory $queryBuilderFactory
+     */
     public function __construct(QueryBuilderFactory $queryBuilderFactory)
     {
         $this->queryBuilderFactory = $queryBuilderFactory;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function supportsFacet(FacetInterface $facet)
     {
         return ($facet instanceof TechnologyFacet);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function generatePartialFacet(
         FacetInterface $facet,
         Criteria $reverted,

@@ -1,17 +1,31 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-04-04
+ * Time: 15:55
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
 namespace VirtuaTechnology\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
+/**
+ * Class TechnologyCondition
+ */
 class TechnologyCondition implements ConditionInterface, \JsonSerializable
 {
     /**
-     * @var $technologies string, technology ids surounded and splited by |
-     * @example |1|2|3|
+     * @var $technologies string, ids splited by |
+     * @example 1|2|3
      */
     private $technologies;
 
+    /**
+     * TechnologyCondition constructor.
+     */
     public function __construct($technologies)
     {
         $this->technologies = $technologies;

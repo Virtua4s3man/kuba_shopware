@@ -29,6 +29,8 @@ class TechnologyProductDetailSubscriber implements SubscriberInterface
     }
 
     /**
+     * Pass technologies to article detail view
+     *
      * @param \Enlight_Controller_ActionEventArgs $args
      */
     public function assignTechnologiesToView(\Enlight_Controller_ActionEventArgs $args)
@@ -57,5 +59,4 @@ class TechnologyProductDetailSubscriber implements SubscriberInterface
             )
             : null;
     }
-
 }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * User: virtua
+ * Date: 2019-04-04
+ * Time: 15:55
+ *
+ * @author  Kuba Kułaga <intern4@wearevirtua.com>
+ * @link    https://github.com/virtIntern4a/kuba_shopware
+ */
 
 namespace VirtuaTechnology\SearchBundle;
 
@@ -9,8 +17,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use VirtuaTechnology\SearchBundle\Condition\TechnologyCondition;
 use VirtuaTechnology\SearchBundle\Facet\TechnologyFacet;
 
+/**
+ * Class TechnologyCriteriaRequestHandler
+ */
 class TechnologyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
+    /**
+     * @inheritdoc
+     */
     public function handleRequest(
         Request $request,
         Criteria $criteria,
@@ -24,6 +38,10 @@ class TechnologyCriteriaRequestHandler implements CriteriaRequestHandlerInterfac
         }
     }
 
+    /**
+     * @param $str
+     * @return bool
+     */
     private function validateTechnologyParameters($str)
     {
         return (bool) preg_match('/^\d+$/', str_replace('|', '', $str));

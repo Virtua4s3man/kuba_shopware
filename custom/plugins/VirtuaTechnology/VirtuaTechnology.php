@@ -13,7 +13,6 @@ namespace VirtuaTechnology;
 
 use Doctrine\ORM\Tools\SchemaTool;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -23,7 +22,9 @@ use Shopware\Components\Plugin\Context\UninstallContext;
  */
 class VirtuaTechnology extends Plugin
 {
-
+    /**
+     * @inheritdoc
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -31,12 +32,17 @@ class VirtuaTechnology extends Plugin
         ];
     }
 
+    /**
+     * Add template dir
+     * @param \Enlight_Controller_ActionEventArgs $args
+     */
     public function onPreDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $args->getSubject()->View()->addTemplateDir($this->getPath() . '/Resources/views/');
     }
 
     /**
+     * Conditionally add product attributes and create custom entity
      * @param InstallContext $context
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
@@ -68,6 +74,10 @@ class VirtuaTechnology extends Plugin
         $tool->createSchema($classes);
     }
 
+    /**
+     * @param UninstallContext $context
+     * @throws \Exception
+     */
     public function uninstall(UninstallContext $context)
     {
         if ($context->keepUserData()) {
