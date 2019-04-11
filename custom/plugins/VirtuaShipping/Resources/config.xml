@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+
+    <elements>
+
+        <!--days of the week in which shipping is blocked-->
+        <element scope="shop"  type="select">
+            <name>no_shipping_week_days</name>
+            <label lang="en">Not shipping</label>
+            <description lang="en">My Field description</description>
+            <store>
+                <option>
+                    <value>1</value>
+                    <label lang="en">Mon</label>
+                </option>
+                <option>
+                    <value>2</value>
+                    <label lang="en">Tus</label>
+                </option>
+                <option>
+                    <value>3</value>
+                    <label lang="en">Wed</label>
+                </option>
+                <option>
+                    <value>4</value>
+                    <label lang="en">Thur</label>
+                </option>
+                <option>
+                    <value>5</value>
+                    <label lang="en">Fri</label>
+                </option>
+                <option>
+                    <value>6</value>
+                    <label lang="en">Sat</label>
+                </option>
+                <option>
+                    <value>7</value>
+                    <label lang="en">Sun</label>
+                </option>
+            </store>
+            <options>
+                <multiSelect>true</multiSelect>
+            </options>
+        </element>
+
+        <!--hour till which the shipping is send the same day-->
+        <element type="time">
+            <name>last_shipping_hour</name>
+            <label lang="en">Ships untill</label>
+            <description lang="en">Hour till which the shipping is send the same day</description>
+        </element>
+
+        <!--no shipping range-->
+        <element type="date">
+            <name>no_shipping_start_date</name>
+            <label lang="en">Start Holidays</label>
+            <description lang="en">Start of holidays</description>
+        </element>
+        <element type="date">
+            <name>no_shipping_end_date</name>
+            <label lang="en">End Holidays</label>
+            <description lang="en">End of holidays</description>
+        </element>
+
+    </elements>
+
+</config>

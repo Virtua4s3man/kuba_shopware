@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="virtua_shipping.config" class="Shopware\Components\Plugin\CachedConfigReader">
+            <factory service="shopware.plugin.cached_config_reader" method="getByPluginName"/>
+            <argument type="string">%virtua_shipping.plugin_name%</argument>
+        </service>
+
+        <service class="VirtuaShipping\Components\ShippingService" id="virtua_shipping.components.schipping_service">
+            <argument id="virtua_shipping.config" type="service"/>
+        </service>
+
+        <service class="VirtuaShipping\Subscriber\ProductDetailSubscriber" id="virtua_shipping.subscriber.product_detail_subscriber">
+            <argument id="virtua_shipping.components.schipping_service" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+    </services>
+</container>
