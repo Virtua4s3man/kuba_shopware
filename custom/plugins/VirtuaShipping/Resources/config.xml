@@ -47,7 +47,7 @@
         <!--hour till which the shipping is send the same day-->
         <element type="time">
             <name>last_shipping_hour</name>
-            <label lang="en">Ships untill</label>
+            <label lang="en">Ships until</label>
             <description lang="en">Hour till which the shipping is send the same day</description>
         </element>
 

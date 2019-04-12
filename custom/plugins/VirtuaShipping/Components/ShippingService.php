@@ -4,44 +4,41 @@ namespace VirtuaShipping\Components;
 
 class ShippingService
 {
-    public $config;
+    private $config;
 
-    private $DateTimeFormat = 'Y-m-d?G:i:s';
-
-    private $today;
+    public $configDateFormat ='Y-m-d?G:i:s';
 
     public function __construct(array $config)
     {
         $this->config = $config;
-        $this->today = new \DateTime('now');
     }
 
-    public function readyToShip(\DateTime $now)
-    {
-        return
-            !$this->toLateToShipToday($now)
-            and !$this->todayInNoShippingTimeRange($now)
-            and !$this->isNoShippingDayOfWeek($now);
-    }
-
-    public function getNearestShippingDate()
+    public function resolveEstimatedDeliveryTime($articleShippingIn)
     {
         $now = new \DateTime('now');
+        $shipmentDate = $this->getNearestShippingDate($now);
+        $daysToDeliver = intval($articleShippingIn);
 
-        if ($this->toLateToShipToday($now)) {
+        return $this->countWorkingDays($daysToDeliver, $shipmentDate);
+    }
+
+    /**
+     * @param \DateTime $now
+     * @return bool|\DateTime
+     */
+    private function getNearestShippingDate(\DateTime $now)
+    {
+        if ($this->afterShippingHours($now)) {
             $now->modify('+1 day');
             $now->setTime(0, 0, 0);
         }
 
-        if ($this->todayInNoShippingTimeRange($now)) {
+        if ($this->inNoShippingTimeRange($now)) {
             $now = $this->convertToConfigToDateTime($this->config['no_shipping_end_date']);
             $now->modify('+1 day');
         }
 
         while (!$this->readyToShip($now)) {
-            if ('00:00:00' !== $now->format('H:i:s')) {
-                    $now->setTime(0, 0, 0);
-            }
             $now->modify('+1 day');
         }
 
@@ -53,31 +50,29 @@ class ShippingService
      *
      * @return bool
      */
-    public function todayInNoShippingTimeRange(\DateTime $now)
+    private function inNoShippingTimeRange(\DateTime $now)
     {
         $start = $this->convertToConfigToDateTime($this->config['no_shipping_start_date']);
         $end = $this->convertToConfigToDateTime($this->config['no_shipping_end_date']);
 
         if ($start and $end and $start < $end) {
-            return $start < $now and $now < $end;
+            return $start <= $now and $now <= $end;
         }
 
         return false;
     }
 
     /**
-     * @param \DateTime $now
+     * @param \DateTime $date
      * @return bool
      */
-    public function toLateToShipToday(\DateTime $now)
+    private function afterShippingHours(\DateTime $date)
     {
         if ($this->config['last_shipping_hour']) {
-            return $now > \DateTime::createFromFormat(
-                'G:i:s',
-                array_pop(
-                    explode('T', $this->config['last_shipping_hour'])
-                )
-            );
+            $lastShippingHour = clone $date;
+            $lastShippingHour->setTime(...$this->lastShippingTimeToArray());
+
+            return $date > $lastShippingHour;
         }
 
         return false;
@@ -87,7 +82,7 @@ class ShippingService
      * @param \DateTime $now
      * @return bool
      */
-    public function isNoShippingDayOfWeek(\DateTime $now)
+    private function isNoShippingDayOfWeek(\DateTime $now)
     {
         if ($this->config['no_shipping_week_days']) {
             return in_array($now->format('N'), $this->config['no_shipping_week_days']);
@@ -97,11 +92,55 @@ class ShippingService
     }
 
     /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    private function readyToShip(\DateTime $date)
+    {
+        return
+            !$this->inNoShippingTimeRange($date)
+            and !$this->isNoShippingDayOfWeek($date);
+    }
+
+    /**
+     * @return array
+     */
+    private function lastShippingTimeToArray()
+    {
+        return explode(
+            ':',
+            array_pop(
+                explode('T', $this->config['last_shipping_hour'])
+            )
+        );
+    }
+
+    /**
      * @param $dateTimeString
      * @return bool|\DateTime
      */
     private function convertToConfigToDateTime($dateTimeString)
     {
-        return \DateTime::createFromFormat('Y-m-d?G:i:s', $dateTimeString);
+        return \DateTime::createFromFormat($this->configDateFormat, $dateTimeString);
+    }
+
+    /**
+     * @param int $daysToDeliver
+     * @param \DateTime $shipmentDate
+     * @return \DateTime
+     */
+    private function countWorkingDays($daysToDeliver, \DateTime $shipmentDate)
+    {
+        while ($daysToDeliver !== 0) {
+            $isFreeDay = $this->isNoShippingDayOfWeek(
+                $shipmentDate->modify('+1 day')
+            ) ? true : false;
+
+            if (!$isFreeDay) {
+                $daysToDeliver--;
+            }
+        }
+
+        return $shipmentDate;
     }
 }
