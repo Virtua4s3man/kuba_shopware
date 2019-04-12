@@ -6,7 +6,7 @@ class ShippingService
 {
     private $config;
 
-    public $configDateFormat ='Y-m-d?G:i:s';
+    public $configDateFormat = 'Y-m-d?G:i:s';
 
     public function __construct(array $config)
     {
@@ -34,7 +34,7 @@ class ShippingService
         }
 
         if ($this->inNoShippingTimeRange($now)) {
-            $now = $this->convertToConfigToDateTime($this->config['no_shipping_end_date']);
+            $now = $this->convertToDateTime($this->config['no_shipping_end_date']);
             $now->modify('+1 day');
         }
 
@@ -52,8 +52,8 @@ class ShippingService
      */
     private function inNoShippingTimeRange(\DateTime $now)
     {
-        $start = $this->convertToConfigToDateTime($this->config['no_shipping_start_date']);
-        $end = $this->convertToConfigToDateTime($this->config['no_shipping_end_date']);
+        $start = $this->convertToDateTime($this->config['no_shipping_start_date']);
+        $end = $this->convertToDateTime($this->config['no_shipping_end_date']);
 
         if ($start and $end and $start < $end) {
             return $start <= $now and $now <= $end;
@@ -119,7 +119,7 @@ class ShippingService
      * @param $dateTimeString
      * @return bool|\DateTime
      */
-    private function convertToConfigToDateTime($dateTimeString)
+    private function convertToDateTime($dateTimeString)
     {
         return \DateTime::createFromFormat($this->configDateFormat, $dateTimeString);
     }
