@@ -12,6 +12,7 @@
 namespace VirtuaTechnology;
 
 use Doctrine\ORM\Tools\SchemaTool;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
@@ -21,7 +22,9 @@ use Shopware\Components\Plugin\Context\UninstallContext;
  */
 class VirtuaTechnology extends Plugin
 {
-
+    /**
+     * @inheritdoc
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -29,34 +32,64 @@ class VirtuaTechnology extends Plugin
         ];
     }
 
+    /**
+     * Add template dir
+     * @param \Enlight_Controller_ActionEventArgs $args
+     */
     public function onPreDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $args->getSubject()->View()->addTemplateDir($this->getPath() . '/Resources/views/');
     }
 
     /**
+     * Conditionally add product attributes and create custom entity
      * @param InstallContext $context
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
     public function install(InstallContext $context)
     {
-        $tool = new SchemaTool($this->container->get('models'));
-        $classes = $this->getModelMetaData();
-
-        try {
-            $tool->dropSchema($classes);
-        } catch (\Exception $e) {
+        if ($this->schemaExists('virtua_technology')) {
+            return;
         }
 
+        /** @var CrudService $attributeCrud */
+        $attributeCrud = $this->container->get('shopware_attribute.crud_service');
+
+        $attributeCrud->update(
+            's_articles_attributes',
+            'technology',
+            'multi_selection',
+            [
+                'label' => 'technology',
+                'supportText' => 'product technology',
+                'displayInBackend' => true,
+                'translatable' => true,
+                'entity' => 'VirtuaTechnology\Models\VirtuaTechnology',
+            ]
+        );
+
+        $tool = new SchemaTool($this->container->get('models'));
+        $classes = $this->getModelMetaData();
         $tool->createSchema($classes);
     }
 
+    /**
+     * @param UninstallContext $context
+     * @throws \Exception
+     */
     public function uninstall(UninstallContext $context)
     {
         if ($context->keepUserData()) {
             return;
         }
+
+        /** @var CrudService $crudService */
+        $attributeCrud = $this->container->get('shopware_attribute.crud_service');
+        $attributeCrud->delete(
+            's_articles_attributes',
+            'technology'
+        );
 
         $tool = new SchemaTool($this->container->get('models'));
         $classes = $this->getModelMetaData();
@@ -71,5 +104,17 @@ class VirtuaTechnology extends Plugin
     private function getModelMetaData()
     {
         return [$this->container->get('models')->getClassMetadata(Models\VirtuaTechnology::class)];
+    }
+
+    /**
+     * Checks if schema exists
+     *
+     * @param $name
+     * @return bool
+     */
+    private function schemaExists($name)
+    {
+        return $this->container->get('dbal_connection')->getSchemaManager()
+                ->tablesExist([$name]) === true;
     }
 }
