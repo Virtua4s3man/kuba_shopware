@@ -25,6 +25,47 @@ class VirtuaPocztaPolska extends Plugin
     }
 
     /**
+     * @param $modelManager
+     * @return Dispatch
+     */
+    private function createPocztaPolskaDispatch($modelManager)
+    {
+        $shippingMethod = new Dispatch();
+        $shippingMethod->setName('Poczta Polska');
+        $shippingMethod->setDescription('');
+        $shippingMethod->setComment('');
+        $shippingMethod->setTaxCalculation(0);
+        $shippingMethod->setBindLastStock(0);
+        $shippingMethod->setPosition(1);
+        $shippingMethod->setActive(true);
+
+        $shippingMethod->setMultiShopId(null);
+        $shippingMethod->setCustomerGroupId(null);
+
+        $shippingMethod->setPayments(
+            $this->getPayments($modelManager)
+        );
+        $shippingMethod->setType(0);
+        $shippingMethod->setSurchargeCalculation(0);
+
+        $shippingMethod->setCalculation(0);
+        $shippingMethod->setCostsMatrix(
+            $this->createCostMatrix()
+        );
+
+        $shippingMethod->setCountries(
+            $this->getEuropeanCountries($modelManager)
+        );
+
+        $shippingMethod->setBindWeekdayFrom(1);
+        $shippingMethod->setBindWeekdayTo(5);
+
+        $shippingMethod->setShippingFree(100);
+
+        return $shippingMethod;
+    }
+
+    /**
      * @param ModelManager $modelManager
      *
      * @return ArrayCollection
@@ -36,6 +77,7 @@ class VirtuaPocztaPolska extends Plugin
             ->from(Payment::class, 'payments')
             ->getQuery()
             ->execute();
+
         return $payments;
     }
 
@@ -43,7 +85,7 @@ class VirtuaPocztaPolska extends Plugin
      * @param $modelManager
      * @return mixed
      */
-    private function getEuropaCountries(ModelManager $modelManager)
+    private function getEuropeanCountries(ModelManager $modelManager)
     {
         $countries = $modelManager->createQueryBuilder()
             ->select('countries')
@@ -76,45 +118,5 @@ class VirtuaPocztaPolska extends Plugin
         $costMatrix[] = $shippingCost;
 
         return $costMatrix;
-    }
-
-    /**
-     * @param $modelManager
-     * @return Dispatch
-     */
-    private function createPocztaPolskaDispatch($modelManager)
-    {
-        $shippingMethod = new Dispatch();
-        $shippingMethod->setName('Poczta Polska');
-        $shippingMethod->setDescription('');
-        $shippingMethod->setComment('');
-        $shippingMethod->setTaxCalculation(0);
-        $shippingMethod->setBindLastStock(0);
-        $shippingMethod->setPosition(1);
-        $shippingMethod->setActive(true);
-
-        $shippingMethod->setMultiShopId(null);
-        $shippingMethod->setCustomerGroupId(null);
-
-        $shippingMethod->setPayments(
-            $this->getPayments($modelManager)
-        );
-        $shippingMethod->setType(0);
-        $shippingMethod->setSurchargeCalculation(0);
-
-        $shippingMethod->setCalculation(0);
-        $shippingMethod->setCostsMatrix(
-            $this->createCostMatrix()
-        );
-
-        $shippingMethod->setCountries(
-            $this->getEuropaCountries($modelManager)
-        );
-
-        $shippingMethod->setBindWeekdayFrom(1);
-        $shippingMethod->setBindWeekdayTo(5);
-
-        $shippingMethod->setShippingFree(100);
-        return $shippingMethod;
     }
 }
