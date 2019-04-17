@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label lang="en">VirtuaPocztaPolska</label>
+    <version>1.0.0</version>
+    <copyright>Kuba Kułaga</copyright>
+    <license>no license</license>
+    <author>Kuba Kułaga</author>
+
+    <compatibility minVersion="5.2.0" />
+</plugin>

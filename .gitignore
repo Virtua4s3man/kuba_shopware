@@ -1,3 +1,9 @@
+# sw.phar
+/bin/sw.phar
+
+# error log
+error.log
+
 # OS generated files
 .DS_Store
 .DS_Store?
