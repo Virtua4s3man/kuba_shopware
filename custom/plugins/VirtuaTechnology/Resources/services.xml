@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!--Event Subscribers-->
+        <service class="VirtuaTechnology\Subscribers\SEOTechnologySubscriber"
+                 id="virtua_technology.subscribers.seotechnology_subscriber">
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service class="VirtuaTechnology\Subscribers\TechnologyProductDetailSubscriber"
+                 id="virtua_technology.subscribers.technology_product_detail_subscriber">
+            <tag name="shopware.event_subscriber"/>
+        </service>
+        <!--Event Subscribers END-->
+
+        <service id="virtua_technology.config" class="Shopware\Components\Plugin\CachedConfigReader">
+            <factory service="shopware.plugin.cached_config_reader" method="getByPluginName"/>
+            <argument type="string">%virtua_technology.plugin_name%</argument>
+        </service>
+
+        <service class="VirtuaTechnology\Components\TechnologyService"
+                 id="virtua_technology.components.technology_service">
+            <argument type="service" id="models" />
+            <argument type="service" id="virtua_technology.config" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <!--Search Services-->
+        <service class="VirtuaTechnology\SearchBundle\TechnologyCriteriaRequestHandler"
+                 id="virtua_technology_search.technology_criteria_request_handler">
+            <tag name="criteria_request_handler"/>
+        </service>
+        <service class="VirtuaTechnology\SearchBundleDBAL\Facet\TechnologyFacetHandler"
+                 id="virtua_technology_search.facet.technology_facet_handler">
+            <argument id="shopware_searchdbal.dbal_query_builder_factory" type="service" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+        <service class="VirtuaTechnology\SearchBundleDBAL\Condition\TechnologyConditionHandler"
+                 id="virtua_technology_search.condition.technology_condition_handler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+
+
+    </services>
+</container>
