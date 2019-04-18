@@ -7,7 +7,7 @@
 
         <service id="virtua_stock_mail.config" class="Shopware\Components\Plugin\CachedConfigReader">
             <factory service="shopware.plugin.cached_config_reader" method="getByPluginName"/>
-            <argument type="string">VirtuaLowStockMail</argument>
+            <argument type="string">VirtuaStockMail</argument>
         </service>
 
         <service class="VirtuaStockMail\Components\Sender" id="virtua_stock_mail.components.sender">

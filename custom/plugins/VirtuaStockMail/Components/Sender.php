@@ -9,7 +9,7 @@ use Doctrine\Common\Util\Debug;
 class Sender
 {
     /** @var array $config */
-    public $config;
+    private $config;
 
     /** @var ModelManager $modelManager */
     private $modelManager;
@@ -34,7 +34,7 @@ class Sender
         $mail->send();
     }
 
-    private function getLowStockItems()
+    public function getLowStockItems()
     {
         $builder = $this->modelManager->getDBALQueryBuilder();
         return $builder->select('product.name, detail.instock')
@@ -45,6 +45,7 @@ class Sender
                 'detail',
                 'product.id = detail.articleID'
             )->where('detail.instock <= :lowStockQty')
+            ->andWhere('detail.kind = 1')
             ->setParameter(':lowStockQty', $this->config['lowStockQty'], \PDO::PARAM_INT)
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);

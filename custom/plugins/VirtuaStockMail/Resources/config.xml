@@ -17,8 +17,7 @@
         <element type="combo">
             <name>emailTemplate</name>
             <label lang="en">Email template</label>
-            <store>
-                <![CDATA[Ext.define('Virtua.MailTemplate.Form', {
+            <store><![CDATA[Ext.define('Virtua.MailTemplate.Form', {
     extend: 'Ext.data.Store',
     fields: [
         { name:'id', type: 'int' },
@@ -35,8 +34,7 @@
             totalProperty: 'total'
         }
     }
-    }).create();//new ]]>
-            </store>
+    }).create();//new ]]></store>
         </element>
 
     </elements>
