@@ -30,7 +30,8 @@ class Sender
             $this->config['emailTemplate'],
             ['lowStockItems' => $this->getLowStockItems()]
         );
-        $mail->addTo('intern4@wearevirtua.com');
+//todo get shop owner mail from db and set it as addTo arg, clean and make cron
+//        $mail->addTo('intern4@wearevirtua.com');
         $mail->send();
     }
 
@@ -48,7 +49,7 @@ class Sender
             ->andWhere('detail.kind = 1')
             ->setParameter(':lowStockQty', $this->config['lowStockQty'], \PDO::PARAM_INT)
             ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
 }

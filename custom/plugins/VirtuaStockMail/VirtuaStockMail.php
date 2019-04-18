@@ -69,15 +69,22 @@ class VirtuaStockMail extends Plugin
 Your low products quantities
 {foreach item=instock key=name from=$lowStockItems}
     {$name}                 {$instock}
+    
 {/foreach}
 {include file="string:{config name=emailfooterplain}"}
 ');
         $mail->setContentHtml('<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
      <h1>Your low products quantities</h1>
+     <table>
     {foreach item=instock key=name from=$lowStockItems}
-        {$name}                 {$instock}
+        <tr>
+            <td>{$name}</td>
+            <td>{$instock}</td>
+        </tr>
+        </br>
     {/foreach}
+    </table>
              
     {include file="string:{config name=emailfooterhtml}"}
 </div>');

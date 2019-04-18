@@ -27,7 +27,7 @@
     pageSize: 25,
     proxy: {
         type: 'ajax',
-        url: window.location.href.substr(0, window.location.href.indexOf('backend')) + 'backend/mail_template/your',
+        url: window.location.href.substr(0, window.location.href.indexOf('backend')) + 'backend/mail_template/get_mail_templates',
         reader: {
             type: 'json',
             root: 'data',
