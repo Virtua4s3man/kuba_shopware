@@ -21,7 +21,6 @@ class Shopware_Controllers_Frontend_Technologies extends Enlight_Controller_Acti
     public function indexAction()
     {
         $technologyService = $this->container->get('virtua_technology.components.technology_service');
-
         $sPage = intval($this->Request()->getParam('p', 1));
         if ($sPage < 1) {
             $sPage = 1;

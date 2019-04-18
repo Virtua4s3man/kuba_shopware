@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element required="true" type="boolean">
+            <name>lowStockAlert</name>
+            <label lang="en">Low stock alert</label>
+            <value>false</value>
+        </element>
+
+        <element type="text">
+            <name>lowStockQty</name>
+            <label lang="en">Low stock quantity</label>
+            <value>3</value>
+        </element>
+
+        <element type="combo">
+            <name>emailTemplate</name>
+            <label lang="en">Email template</label>
+            <store>
+                <![CDATA[Ext.define('Virtua.MailTemplate.Form', {
+    extend: 'Ext.data.Store',
+    fields: [
+        { name:'id', type: 'int' },
+        { name:'name', type: 'string' }
+    ],
+    autoLoad: true,
+    pageSize: 25,
+    proxy: {
+        type: 'ajax',
+        url: window.location.href.substr(0, window.location.href.indexOf('backend')) + 'backend/mail_template/your',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
+    }
+    }).create();//new ]]>
+            </store>
+        </element>
+
+    </elements>
+</config>
