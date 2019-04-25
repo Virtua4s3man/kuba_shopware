@@ -1,5 +1,6 @@
 # sw.phar
 /bin/sw.phar
+/bin/phpunit
 
 # error log
 error.log
