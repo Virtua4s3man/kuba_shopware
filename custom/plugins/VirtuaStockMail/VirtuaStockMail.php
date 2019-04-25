@@ -2,22 +2,23 @@
 
 namespace VirtuaStockMail;
 
-use Doctrine\Common\Util\Debug;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Models\Mail\Mail;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Shopware-Plugin VirtuaStockMail.
  */
 class VirtuaStockMail extends Plugin
 {
+    /** @var string  */
     private $templateName = 'VirtuaLowStockEmailTemplate';
 
+    /**
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -25,11 +26,18 @@ class VirtuaStockMail extends Plugin
         ];
     }
 
+    /**
+     * @param \Enlight_Controller_ActionEventArgs $args
+     */
     public function registerView(\Enlight_Controller_ActionEventArgs $args)
     {
         $args->getSubject()->View()->addTemplateDir($this->getPath() . '/Resources/views');
     }
 
+    /**
+     * @param InstallContext $context
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function install(InstallContext $context)
     {
         Shopware()->Container()->get('templatemail');
@@ -42,6 +50,10 @@ class VirtuaStockMail extends Plugin
         }
     }
 
+    /**
+     * @param UninstallContext $context
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function uninstall(UninstallContext $context)
     {
         if ($context->keepUserData()) {
@@ -65,29 +77,12 @@ class VirtuaStockMail extends Plugin
         $mail->setName($this->templateName);
         $mail->setSubject('Low quantity of products in your stock!');
         $mail->setIsHtml(1);
-        $mail->setContent('{include file="string:{config name=emailheaderplain}"}
-Your low products quantities
-{foreach item=instock key=name from=$lowStockItems}
-    {$name}                 {$instock}
-    
-{/foreach}
-{include file="string:{config name=emailfooterplain}"}
-');
-        $mail->setContentHtml('<div style="font-family:arial; font-size:12px;">
-    {include file="string:{config name=emailheaderhtml}"}
-     <h1>Your low products quantities</h1>
-     <table>
-    {foreach item=instock key=name from=$lowStockItems}
-        <tr>
-            <td>{$name}</td>
-            <td>{$instock}</td>
-        </tr>
-        </br>
-    {/foreach}
-    </table>
-             
-    {include file="string:{config name=emailfooterhtml}"}
-</div>');
+        $mail->setContent(
+            $this->getTemplateContent('VirtuaLowStock')
+        );
+        $mail->setContentHtml(
+            $this->getTemplateContent('VirtuaLowStock.html')
+        );
         $mail->setFromMail('{config name=mail}');
         $mail->setFromName('{config name=shopName}');
 
@@ -95,7 +90,8 @@ Your low products quantities
     }
 
     /**
-     * @return Mail|null
+     * @param ModelManager $modelManager
+     * @return object|Mail|null
      */
     private function getLowStockMailTemplate(ModelManager $modelManager)
     {
@@ -104,5 +100,15 @@ Your low products quantities
         );
 
         return $mailTemplate ? $mailTemplate : null;
+    }
+
+    /**
+     * @param $templateName
+     * @return string
+     */
+    private function getTemplateContent($templateName)
+    {
+        $content = file_get_contents($this->getPath() . '/EmailTemplates/' . $templateName);
+        return $content ? $content : '';
     }
 }

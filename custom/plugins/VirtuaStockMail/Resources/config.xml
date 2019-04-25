@@ -14,9 +14,10 @@
             <value>3</value>
         </element>
 
-        <element type="combo">
+        <element type="combo" required="true">
             <name>emailTemplate</name>
             <label lang="en">Email template</label>
+            <value>VirtuaLowStockEmailTemplate</value>
             <store><![CDATA[Ext.define('Virtua.MailTemplate.Form', {
     extend: 'Ext.data.Store',
     fields: [

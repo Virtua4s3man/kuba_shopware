@@ -1,0 +1,7 @@
+{include file="string:{config name=emailheaderplain}"}
+Your low products quantities
+{foreach item=instock key=name from=$lowStockItems}
+    {$name}                 {$instock}
+
+{/foreach}
+{include file="string:{config name=emailfooterplain}"}

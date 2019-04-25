@@ -2,14 +2,12 @@
 
 namespace VirtuaStockMail\Components;
 
-
 use Shopware\Components\Model\ModelManager;
-use Doctrine\Common\Util\Debug;
 
 class Sender
 {
-    /** @var array $config */
-    private $config;
+    /** @var array $pluginConfig */
+    private $pluginConfig;
 
     /** @var ModelManager $modelManager */
     private $modelManager;
@@ -17,25 +15,48 @@ class Sender
     /** @var \Shopware_Components_TemplateMail $templateMail */
     private $templateMail;
 
-    public function __construct(array $config, ModelManager $modelManager, \Shopware_Components_TemplateMail $templateMail)
-    {
-        $this->config = $config;
+    /** @var \Shopware_Components_Config  */
+    private $shopwareConfig;
+
+    /**
+     * Sender constructor.
+     * @param array $pluginConfig
+     * @param ModelManager $modelManager
+     * @param \Shopware_Components_TemplateMail $templateMail
+     * @param \Shopware_Components_Config $shopwareConfig
+     */
+    public function __construct(
+        array $pluginConfig,
+        ModelManager $modelManager,
+        \Shopware_Components_TemplateMail $templateMail,
+        \Shopware_Components_Config $shopwareConfig
+    ) {
+        $this->pluginConfig = $pluginConfig;
         $this->modelManager = $modelManager;
         $this->templateMail = $templateMail;
+        $this->shopwareConfig = $shopwareConfig;
     }
 
+    /**
+     * @throws \Enlight_Exception
+     */
     public function sendLowStockMail()
     {
         $mail = $this->templateMail->createMail(
-            $this->config['emailTemplate'],
+            $this->pluginConfig['emailTemplate'],
             ['lowStockItems' => $this->getLowStockItems()]
         );
-//todo get shop owner mail from db and set it as addTo arg, clean and make cron
-//        $mail->addTo('intern4@wearevirtua.com');
+        $mail->addTo(
+            $this->shopwareConfig->get('mail')
+        );
+
         $mail->send();
     }
 
-    public function getLowStockItems()
+    /**
+     * @return array
+     */
+    private function getLowStockItems()
     {
         $builder = $this->modelManager->getDBALQueryBuilder();
         return $builder->select('product.name, detail.instock')
@@ -47,9 +68,8 @@ class Sender
                 'product.id = detail.articleID'
             )->where('detail.instock <= :lowStockQty')
             ->andWhere('detail.kind = 1')
-            ->setParameter(':lowStockQty', $this->config['lowStockQty'], \PDO::PARAM_INT)
+            ->setParameter(':lowStockQty', $this->pluginConfig['lowStockQty'], \PDO::PARAM_INT)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
-
 }

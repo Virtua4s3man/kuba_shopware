@@ -2,6 +2,9 @@
 
 class Shopware_Controllers_Backend_MailTemplate extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * Fetchs mail templates from db
+     */
     public function getMailTemplatesAction()
     {
         $builder = $this->container->get('dbal_connection')->createQueryBuilder();
