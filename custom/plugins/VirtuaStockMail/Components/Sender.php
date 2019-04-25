@@ -42,6 +42,10 @@ class Sender
      */
     public function sendLowStockMail()
     {
+        if ($this->pluginConfig['lowStockAlert'] === false) {
+            return;
+        }
+
         $mail = $this->templateMail->createMail(
             $this->pluginConfig['emailTemplate'],
             ['lowStockItems' => $this->getLowStockItems()]
