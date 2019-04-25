@@ -55,8 +55,8 @@ class ShippingService
         $start = $this->convertToDateTime($this->config['no_shipping_start_date']);
         $end = $this->convertToDateTime($this->config['no_shipping_end_date']);
 
-        if ($start and $end and $start < $end) {
-            return $start <= $now and $now <= $end;
+        if ($start && $end && $start < $end) {
+            return $start <= $now && $now <= $end;
         }
 
         return false;
@@ -99,7 +99,7 @@ class ShippingService
     {
         return
             !$this->inNoShippingTimeRange($date)
-            and !$this->isNoShippingDayOfWeek($date);
+            && !$this->isNoShippingDayOfWeek($date);
     }
 
     /**

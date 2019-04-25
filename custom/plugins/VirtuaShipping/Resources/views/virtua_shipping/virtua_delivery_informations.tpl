@@ -11,7 +11,7 @@
             </p>
         {/if}
 
-        {if isset({$sArticle.delivery_time}) and $sArticle.delivery_time}
+        {if isset({$sArticle.delivery_time}) && $sArticle.delivery_time}
             <link itemprop="availability" href="http://schema.org/LimitedAvailability" />
             <p class="delivery--information">
                     <span class="delivery--text delivery--text-available">
@@ -52,13 +52,13 @@
                 </span>
             </p>
         {elseif $sArticle.instock >= $sArticle.minpurchase}
-            {*<link itemprop="availability" href="http://schema.org/InStock" />*}
-            {*<p class="delivery--information">*}
-                {*<span class="delivery--text delivery--text-available">*}
-                    {*<i class="delivery--status-icon delivery--status-available"></i>*}
-                    {*{s name="DetailDataInfoInstock"}{/s}*}
-                {*</span>*}
-            {*</p>*}
+            <link itemprop="availability" href="http://schema.org/InStock" />
+            <p class="delivery--information">
+                <span class="delivery--text delivery--text-available">
+                    <i class="delivery--status-icon delivery--status-available"></i>
+                    {s name="DetailDataInfoInstock"}{/s}
+                </span>
+            </p>
         {elseif $sArticle.shippingtime}
             <link itemprop="availability" href="http://schema.org/LimitedAvailability" />
             <p class="delivery--information">

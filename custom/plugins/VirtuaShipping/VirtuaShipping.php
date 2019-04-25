@@ -50,10 +50,6 @@ class VirtuaShipping extends Plugin
         /** @var CrudService $attributeCrud */
         $attributeCrud = $this->container->get('shopware_attribute.crud_service');
 
-//        if ($attributeCrud->get('s_articles_attributes', 'shipping_in')) {
-//             return;
-//        }
-
         $attributeCrud->update(
             's_articles_attributes',
             'shipping_in',
@@ -76,9 +72,9 @@ class VirtuaShipping extends Plugin
      */
     public function uninstall(UninstallContext $context)
     {
-//        if ($context->keepUserData()) {
-//            return;
-//        }
+        if ($context->keepUserData()) {
+            return;
+        }
 
         /** @var CrudService $crudService */
         $attributeCrud = $this->container->get('shopware_attribute.crud_service');
